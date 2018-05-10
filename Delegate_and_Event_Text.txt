@@ -1,0 +1,170 @@
+LÝ THUY?T DELEGATE VÀ EVENT
+
+1. Tham kh?o video (d? hi?u): 
+https://www.youtube.com/watch?v=BMzvbwccofw
+
+2. Khái ni?m Delegate:
+*	Có th? g?i là hàm ? nhi?m, gi?ng nhu m?t d?i s?, th?c hi?n ? nhi?m các phuong th?c(hàm) khác, mà không c?n g?i các huong th?c m?t cách tr?c ti?p.
+*	Gi?ng nhu con tr? hàm (function pointer) trong ngôn ng? C++.
+*	Delegate là m?t ki?u tham chi?u, nó tham chi?u d?n m?t/nhi?u phuong th?c nào dó.
+*	Delegate là m?t d?i tu?ng, có th? dóng gói m?t ho?c nhi?u phuong th?c.
+*	Delegate là c?u n?i trung gian gi?a phuong th?c x? lý s? ki?n và s? ki?n.
+
+Chú ý: 
+Delegate là m?t d?i tu?ng.
+Không thu?c m?t l?p nào => nên có th? g?i b?t k? ch? nào.
+Là m?t ki?u lai gi?a d?i tu?ng và phuong th?c.
+
+3. Khai báo:
+[modifier] delegate <Return_type> <name_delegate>([arguments])
+
+4. Event:
+sinh ra t? m?t d?i tu?ng.
+thông báo cho d?i tu?ng khác có s? thay d?i.
+
+====
+DELEGATE có th? dùng =/+=/-=
+EVENT thì không, ch? +=/-=
+=> Do dó dùng event nhung m?t l?p b?o v? delegate, tránh gán = null, s? làm danh sách g?i hàm trc dó b? m?t.
+
+Tham kh?a thêm:
+http://vubka.blogspot.com/2010/08/su-khac-nhau-giua-delegate-va-event.html
+
+=====
+COPY T? NGU?N:
+http://tapchilaptrinh.vn/2012/07/16/delegates-va-events-trong-c/
+
+Có m?t th?c t? dang x?y ra dó là nhi?u ngu?i r?t hay nh?m l?n gi?a hai khái ni?m Delegate và Event, d?c bi?t là d?i v?i nh?ng ngu?i m?i làm quen v?i ngôn ng? C# nói riêng và các ngôn ng? khác thu?c n?n t?ng .NET nói chung; Và ngay c? d?i v?i nh?ng l?p trình viên dã có thâm niên thì cung không ph?i d? dàng gì có th? phân bi?t du?c r?ch ròi s? khác nhau gi?a hai khái ni?m này. Bài vi?t này s? dua ra m?t s? phân tích, so sánh, qua dó mong mu?n có th? làm rõ hon b?n ch?t c?a hai khái ni?m Delegate và Event, và giúp chúng ta th?y rõ hon du?c s? khác nhau cung nhu m?i quan h? gi?a chúng.
+1. Delegate
+Theo nhu d?nh nghia du?c dua ra trên MSDN thì delegate là m?t ki?u ch?a tham chi?u d?n m?t ho?c nhi?u phuong th?c (method), có th? là phuong th?c c?a l?p (class’s method) ho?c là phuong th?c c?a d?i tu?ng (object’s method). Ð?i v?i nh?ng ai dã làm vi?c v?i ngôn ng? C ho?c C++ thì có th? th?y delegate g?n gi?ng v?i khái ni?m Con tr? hàm (funtion’s pointer). Tuy nhiên, hi?n nay trong nhi?u tài li?u v?n hay dùng chung t? delegate d? ch? d?n hai khái ni?m khác nhau, gây ra s? m?p m?, dó là Ki?u delegate (delegate type) và Th?c th? delegate(delegate instance, hay còn có th? g?i là Ð?i tu?ng delegate); Do dó, trong bài vi?t này chúng ta s? không s? d?ng t? delegate v?i nghia chung nhu v?y mà s? phân bi?t r?ch ròi gi?a ki?u delegate và d?i tu?ng delegate.
+M?t ki?u delegate du?c khai báo b?ng cách s? d?ng t? khóa delegate di kèm theo v?i ki?u d? li?u tr? v?, tên và danh sách tham s? c?a nó. Ð? m?t delegate có th? ch?a tham chi?u d?n m?t phuong th?c khác (ho?c dôi khi ta có th? nói là: delegate d?i di?n cho m?t phuong th?c) thì c? delegate và phuong th?c mà nó tham chi?u d?n ph?i có cùng nguyên m?u (signature), có nghia là c? hai d?u ph?i có chung ki?u d? li?u tr? v? và danh sách tham s?.
+Ta s? xét m?t ví d? mà ? dó có m?t delegate v?i tên là Calculation du?c khai báo, ki?u delegate này có ki?u d? li?u tr? v? là int, nh?n vào hai tham s? thu?c ki?u int; M?t d?i tuong c?a delegate Calculation du?c t?o ra và tham chi?u d?n phuong th?c Add() c?a l?p Program, chúng ta có th? d? ý r?ng c? ki?u delegate Calculation và phuong th?c Add() có ki?u d? li?u tr? v? và danh sách tham s? gi?ng nhau.
+namespace Test
+{
+  public delegate int Calculation(int a, int b);
+  class Program
+  {
+    static int Add(int a, int b){
+      return a + b;
+    }
+    static void Main(string[] args)
+    {
+      Calculation ca = new Calculation(Add);
+      int c = ca(5, 4);
+      Console.WriteLine(“c = {0}”, c);
+      Console.ReadLine();
+    }
+  }
+}
+ M?t cách dùng khác c?a delegate dó là k? thu?t s? d?ng delegate d? truy?n m?t phuong th?c vào nhu là tham s? c?a m?t phuong th?c khác, ta cùng xem ví d? sau:
+using System; namespace Test {
+public delegate int Calculation(int a, int b); class Program {
+static int Add(int a, int b) {
+return a + b;
+} static int Sub(int a, int b) {
+return a – b;
+}
+static int Calculate(int a, int b, Calculation cal) {
+return cal(a, b);
+} static void Main(string[] args) {
+int c = Calculate(5, 4, Add); Console.WriteLine(“c = {0}”, c); int d = Calculate(5, 4, Sub); Console.WriteLine(“d = {0}”, d); Console.ReadLine();
+}
+}
+}
+? ví d? trên thì ta dã t?o ra m?t phuong th?c Calculate() có hai tham s? ki?u int và m?t tham s? thu?c ki?u delegate Calculation, v?i cách làm này thì sau này, khi dem ra s? d?ng hàm Calculate() thì ta hoàn toàn có th? t? do truy?n vào b?t c? hàm nào d? th?c hi?n tính toán, mi?n sao hàm dó ph?i có cùng nguyên m?u v?i ki?u delegate Calculation. Cách làm này còn du?c s? d?ng d? tri?n khai k? thu?t callback, d? tránh làm cho bài vi?t quá dài thì nh?ng ai quan tâm t?i v?n d? này, xin vui lòng tìm hi?u thêm ? dây và ? dây.
+2. Event
+Ði?u d?u tiên mà chúng ta c?n kh?ng d?nh dó là: Event không ph?i là d?i tu?ng delegate. Ð? giúp chúng ta có th? th?y rõ du?c b?n ch?t c?a  event cung nhu s? khác nhau gi?a event và delegate thì chúng ta s? mu?n hai khái ni?m khác cung du?c s? d?ng r?t ph? bi?n trong ngôn ng? C# dó là Field và Property. Nhìn t? bên ngoài thì Property có v? r?t gi?ng v?i Field nhung b?n ch?t thì Property không ph?i là Field; Field là m?t bi?n, nó ch?a d? li?u, còn Property là m?t kh?i l?nh, nó gi?ng v?i Method hon. Trong m?t Property thì ta có hai kh?i l?nh có th? du?c khai báo dó là get và set còn Field thì ch? du?c khai báo trên m?t dòng. Thông thu?ng thì ngu?i ta s? d?ng các Property nhu là cách d? truy xu?t d?n các Field c?a l?p dó, nhu trong ví d? sau:
+class Customer {
+private string name;
+public string Name {
+get {
+return this.name;
+} set{
+this.name = value;
+}
+}
+}
+Nhung dôi lúc ta cung có th? t?o ra các Property mà không dính dáng gì d?n Field c?:
+class TimeUtil {
+public DateTime CurrentTime{
+get {
+return DateTime.Now;
+}
+}
+}
+ Và v?i s? c?i ti?n không ng?ng c?a C# nói riêng và .NET nói chung thì bây gi? ta có th? khai báo Property v?i d?ng nhu sau:
+class Customer {
+public string Name {
+get;
+set;
+}
+}
+Nhìn kh?i l?nh trên thì th?t don gi?n ph?i không, và hình nhu là không có b?t c? m?t Field nào du?c khai báo trong dó c?, nhung th?c t? thì nó l?i khác. Trình biên d?ch s? t? d?ng t?o ra m?t field có ki?u string r?i sau dó s? d?ng nó d? tri?n khai property Name, và nhu v?y, do?n code ? trên th?c ra ch? là m?t phiên b?n rút g?n c?a l?p Customer mà chúng ta dã xem xét tru?c dó. Bây gi? thì chúng ta dã n?m rõ ràng hon v? b?n ch?t c?a Field và Property, chúng ta quay l?i tru?ng h?p c?a Delegate và Event, có th? nói r?ng m?i liên quan gi?a Delegate và Event không khác v?i m?i liên quan gi?a Field và Property là m?y. Thông thu?ng, d? xây d?ng m?t Event thì ta th?c hi?n nhu ví d? sau:
+public delegate void ErrorNotification(string message);
+class MyMachine{
+public event ErrorNotification Notify;
+public void ReportError(string error) {
+if (Notify != null)
+Notify(error);
+}
+}
+và s? d?ng:
+static void Main(string[] args) {
+MyMachine machine = new MyMachine();
+machine.Notify += new ErrorNotification(PrintString);
+machine.ReportError(“Some bug ocurred”);
+Console.ReadLine();
+}
+static void PrintString(string msg){
+Console.WriteLine(msg);
+}
+? ví d? trên thì ta dã khai báo m?t ki?u delegate có tên là ErrorNotification, sau dó s? d?ng nó d? t?o m?t event cho l?p MyMachine v?i tên là Notify. Nhìn vào do?n code dó thì s? có nhi?u ngu?i cho r?ng event du?c t?o ra b?ng cách t?o m?t d?i tu?ng m?i c?a ki?u delegate ErrorNotification, nhung th?c t? thì không h? don gi?n nhu v?y. M?t Event th?c ch?t là m?t kh?i l?nh, tuong t? nhu Property, nó cung có hai kh?i l?nh con du?c khai báo trong dó là add và remove; kh?i l?nh add du?c dùng d? dang ký m?t phuong th?c v?i event, còn kh?i l?nh remove du?c dùng d? g? b? m?t phuong th?c ra kh?i event dó. Ðây chính là cách khai báo m?t event ng?n g?n, và d? gây ra nh?m l?n, ta th? vi?t l?i do?n code c?a l?p MyMachine? d?ng nguyên th?y c?a nó:
+class MyMachine{
+private ErrorNotification notify;//Delegate instance
+//Event declaration
+public event ErrorNotification Notify{
+add{
+this.notify += value;
+}
+remove{
+this.notify -= value;
+}
+}
+public void ReportError(string error) {
+if (notify != null)
+notify(error);
+}
+}
+và dem ra s? d?ng:
+static void Main(string[] args) {
+MyMachine machine = new MyMachine();
+machine.Notify += new ErrorNotification(PrintString);
+machine.ReportError(“Some bug ocurred”);
+Console.ReadLine();
+}
+static void PrintString(string msg){
+Console.WriteLine(msg);
+}
+Hãy chú ý d?n cái cách mà chúng ta dã khai báo event Notify c?a l?p MyMachine v?i hai kh?i l?nh add và remove bên trong. Và v?i cách tri?n khai c? th? nhu v?y, ta có th? d? dàng th?y r?ng Event th?c ch?t là cái cách mà chúng ta s? d?ng d? truy xu?t d?n m?t private delegate ? bên trong m?t l?p; ? dây thì value có ki?u là ErrorNotification . Bây gi? thì b?n dã tin cái câu kh?ng d?nh tru?c dó chua? Event không ph?i là d?i tu?ng delegate. Và ch?c b?n cung dã thông c?m du?c v?i vi?c t?i sao chúng ta l?i d?a vào Field và Property d? có d?n d?t vào v?n d? tuong quan gi?a Delegate và Event, b?i vì th?c s? nó có s? tuong d?ng nhau mà. Tóm l?i thì cách khai báo event có d?ng:
+public event EventHandler MyEvent
+ch? là m?t cách vi?t ng?n g?n, và nó còn có tên g?i là field-like event.
+3. M?u ch?t c?a v?n d?
+T?i sao l?i c?n thi?t ph?i có c? hai khái ni?m là delegate và event? Câu tr? l?i ? dây chính là Encapsulation (tính bao gói).
+Ðâu là cách d? dang ký m?t event cho m?t d?i tu?ng nào dó? Có ba s? l?a ch?n:
+– M?t là, t?o m?t d?i tu?ng delegate v?i m?c truy c?p là public, cách này thì ch?c ch?n là b? lo?i d?u tiên, vì nó không d?m b?o du?c s? dóng gói c?a d?i tu?ng.
+– Cách th? 2, t?o m?t d?i tu?ng delegate có m?c truy c?p là private và d?ng th?i t?o ra m?t property d? truy xu?t d?n d?i tu?ng delegate dó; cách này thì khá hon cách tru?c, nhung nhu?c di?m c?a nó là ta có th? s? có khó khan khi mu?n dang ký nhi?u phuong th?c v?i s? ki?n này, b?i vì nó ch? có th? nh?n vào m?t phuong th?c mà thôi, ví d?: someInstance.MyEvent = eventHandler, nhu v?y thì nó s? xóa m?t phuong th?c mà tru?c dó MyEvent dã tham chi?u d?n, chú ý d?n toán t? “=” ch? không ph?i là  “+=” (Propety thì không th? dùng v?i toán t? +=).
+– Cách th? 3, và cung là cách mà ta dang s? d?ng, dó là t?o m?t d?i tu?ng delegate r?i sau dó t?o hai kh?i l?nh dùng d? add và remove các d?i tu?ng delegate. V?i cách th? 3 thì ta dã b?o d?m du?c tính bao gói m?t cách toàn di?n. Và cách th? 3 khi du?c vi?t ng?n g?n thì chính là cái cách mà chúng ta v?n thu?ng dùng, k? t? khi b?t d?u làm quen v?i events.
+4. M?t vài s? khác nhau v? cách s? d?ng c?a Delegate và Event
+– Event có th? du?c khai báo trong interface, Delegate thì không.
+– Event ch? có th? du?c g?i (invoked) ? bên trong class ch?a nó, Delegate thì có th? du?c g?i ? b?t c? dâu (Tùy thu?c vào access modifier).
+5. K?t lu?n
+Delegate cung c?p cho ta m?t cách don gi?n d? có th? d?i di?n cho các l?i g?i c?a phuong th?c, d?c bi?t là các phuong th?c c?a d?i tu?ng. Delegate du?c s? d?ng d? tri?n khai các event.
+Trong khi dó, event là cách d? m?t l?p có th? dua ra các thông báo (notification) d?n các l?p khác khi có m?t s? ki?n nào dó x?y ra v?i b?n thân nó. L?p tung ra event du?c g?i là publisher, còn l?p nh?n và x? lý các event này du?c g?i là Subcriber.
+Event và Delegate là m?t cách mà C# s? d?ng d? tri?n khai co ch? Observer Pattern (cung còn du?c g?i là mô hình Publisher/Subcriber), di?u mà trong Java thì du?c th?c hi?n b?i  các ActionListener.
+Tham kh?o:
+http://csharpindepth.com/Articles/Chapter2/Events.aspxhttp://blog.monstuff.com/archives/000040.htmlhttp://weblogs.asp.net/rosherove/archive/2004/03/28/100444.aspxhttp://blogs.msdn.com/b/thottams/archive/2009/04/11/asynchronous-delegates-and-calback.aspxhttp://msdn.microsoft.com/en-us/library/ms173172(v=vs.80).aspx
+
+
+
+
+
